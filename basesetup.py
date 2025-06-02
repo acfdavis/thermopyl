@@ -1,14 +1,13 @@
-from __future__ import print_function, absolute_import
 import os
 import sys
-import imp
 import json
 import string
 import shutil
 import subprocess
 import tempfile
+import imp
 from distutils.dep_util import newer_group
-from distutils.core import Extension
+from setuptools import Extension
 from distutils.errors import DistutilsExecError
 from distutils.ccompiler import new_compiler
 from distutils.sysconfig import customize_compiler, get_config_vars
@@ -133,7 +132,6 @@ class CompilerDetection(object):
     def hasfunction(self, funcname, include=None, libraries=None, extra_postargs=None):
         # running in a separate subshell lets us prevent unwanted stdout/stderr
         part1 = '''
-from __future__ import print_function
 import os
 import json
 from distutils.ccompiler import new_compiler
@@ -304,7 +302,7 @@ class build_ext(_build_ext):
             _build_ext.build_extension(self, ext)
 
     def build_static_extension(self, ext):
-        from distutils import log
+        from setuptools import log
 
         sources = ext.sources
         if sources is None or not isinstance(sources, (list, tuple)):
@@ -357,3 +355,6 @@ class build_ext(_build_ext):
 
         for item in ext.export_include:
             shutil.copy(item, output_dir)
+
+# distutils and imp are deprecated in modern Python and should not be used.
+# This file is now obsolete for modern builds and should be removed or replaced with setuptools-only logic if needed.

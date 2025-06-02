@@ -1,7 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Update local mirror of the ThermoML Archive.
-
 """
 import thermopyl
 
@@ -9,5 +8,5 @@ def main():
     thermopyl.update_archive()
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())
 

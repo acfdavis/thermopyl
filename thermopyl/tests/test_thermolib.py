@@ -25,27 +25,25 @@ def test_formula_to_element_counts():
 
 def test_thermopyl():
     filename = get_fn("je8006138.xml")
-
     parser = thermoml_lib.Parser(filename)
     current_data = parser.parse()
     name_to_formula = parser.compound_name_to_formula
+    assert current_data is not None
+    assert isinstance(name_to_formula, dict)
+
 
 def test_build_pandas_dataframe():
     tmpdir = tempfile.mkdtemp()
-
     from thermopyl.utils import build_pandas_dataframe, pandas_dataframe
-
     # Generate dataframe
     filenames = [get_fn("je8006138.xml")]
-    [data, compounds] = build_pandas_dataframe(filenames)
-
+    data, compounds = build_pandas_dataframe(filenames)
     # Write as HDF5
-    data.to_hdf(os.path.join(tmpdir, 'data.h5'), 'data')
-    compounds.to_hdf(os.path.join(tmpdir, 'compound_name_to_formula.h5'), 'data')
-
+    data.to_hdf(os.path.join(tmpdir, 'data.h5'), key='data')
+    compounds.to_hdf(os.path.join(tmpdir, 'compound_name_to_formula.h5'), key='data')
     # Read dataframe
     df = pandas_dataframe(thermoml_path=tmpdir)
-
+    assert not df.empty
     # Clean up tmpdir
     import shutil
     shutil.rmtree(tmpdir)

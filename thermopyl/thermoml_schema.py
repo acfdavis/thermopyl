@@ -4,7 +4,6 @@
 # Generated 2014-12-10 10:29:04.168411 by PyXB version 1.2.4 using Python 2.7.8.final.0
 # Namespace http://www.iupac.org/namespaces/ThermoML
 
-from __future__ import unicode_literals
 import pyxb
 import pyxb.binding
 import pyxb.binding.saxer
@@ -12,7 +11,8 @@ import io
 import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
-import pyxb.utils.six as _six
+
+# Remove PyXB six import (not needed in Python 3)
 
 # Unique identifier for bindings created at the same time
 _GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:45a87b9a-8081-11e4-87a5-e840f2c90d8f')
@@ -21,6 +21,8 @@ _GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:45a87b9a-8081-11e
 _PyXBVersion = '1.2.4'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
+    raise pyxb.PyXBVersionError(_PyXBVersion)
+    raise pyxb.PyXBVersionError(_PyXBVersion)
     raise pyxb.PyXBVersionError(_PyXBVersion)
 
 # Import bindings for namespaces imported into schema

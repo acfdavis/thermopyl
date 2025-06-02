@@ -6,29 +6,29 @@ source:
   path: ../../
 
 build:
-  preserve_egg_dir: True
+  preserve_egg_dir: False  # Not needed for pip/setuptools builds
   number: 0
 
 requirements:
   build:
     - python
-    - six
+    - pip
     - pandas
-    - pyxb ==1.2.4
+    - pyxb ==1.2.6
     - feedparser
     - pytables
 
   run:
     - python
-    - six
     - pandas
-    - pyxb ==1.2.4
+    - pyxb ==1.2.6
     - feedparser
     - pytables
 
 test:
   requires:
     - nose
+    - pip
   imports:
     - thermopyl
   commands:
