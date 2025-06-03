@@ -1,15 +1,8 @@
 import sys
 import os
-from typing import List, Tuple, Union
 
-def check_dependencies(dependencies: List[Union[Tuple[str], Tuple[str, str]]]):
-    """Check for required dependencies and print install instructions if missing.
-
-    Parameters
-    ----------
-    dependencies : list of (import_name,) or (import_name, pip_name)
-        Each entry is a tuple: (import_name,) or (import_name, pip/conda name)
-    """
+def check_dependencies(dependencies):
+    """Check for required dependencies and print install instructions if missing."""
     def module_exists(dep):
         try:
             __import__(dep)
@@ -23,7 +16,7 @@ def check_dependencies(dependencies: List[Union[Tuple[str], Tuple[str, str]]]):
         elif len(dep) == 2:
             import_name, pkg_name = dep
         else:
-            raise ValueError(f"Dependency tuple must have 1 or 2 elements: {dep}")
+            raise ValueError(dep)
 
         if not module_exists(import_name):
             lines = [

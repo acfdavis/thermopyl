@@ -1,14 +1,11 @@
 import os
-from typing import List
 
-def find_packages(base_dir: str = 'thermopyl', prefix: str = 'thermopyl') -> List[str]:
+def find_packages(base_dir='MDTraj', prefix='mdtraj'):
     """Find all Python packages in a directory tree."""
-    packages = []
+    packages = [f'{prefix}.scripts']
     for dirpath, subdirs, files in os.walk(base_dir):
         if '__init__.py' not in files:
             continue
         package = dirpath.replace(os.path.sep, '.')
-        if base_dir != prefix:
-            package = package.replace(base_dir, prefix, 1)
-        packages.append(package)
+        packages.append(package.replace(base_dir, prefix))
     return packages

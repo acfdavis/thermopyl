@@ -14,28 +14,24 @@ requirements:
     - python
     - pip
     - pandas
-    - pyxb ==1.2.6
+    - numpy
     - feedparser
     - pytables
-
   run:
     - python
     - pandas
-    - pyxb ==1.2.6
+    - numpy
     - feedparser
     - pytables
 
 test:
   requires:
-    - nose
+    - pytest
     - pip
   imports:
     - thermopyl
   commands:
-    - nosetests thermopyl --nocapture --verbosity=2 --with-doctest
-    - thermoml-update-mirror
-    - thermoml-build-pandas --help
-    - thermoml-build-pandas --journalprefix=acs
+    - pytest thermopyl/tests --maxfail=1 --disable-warnings -v
 
 about:
   home: https://github.com/choderalab/thermopyl

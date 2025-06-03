@@ -5,9 +5,8 @@ import string
 import shutil
 import subprocess
 import tempfile
-import imp
 from distutils.dep_util import newer_group
-from setuptools import Extension
+from distutils.core import Extension
 from distutils.errors import DistutilsExecError
 from distutils.ccompiler import new_compiler
 from distutils.sysconfig import customize_compiler, get_config_vars
@@ -302,7 +301,7 @@ class build_ext(_build_ext):
             _build_ext.build_extension(self, ext)
 
     def build_static_extension(self, ext):
-        from setuptools import log
+        from distutils import log
 
         sources = ext.sources
         if sources is None or not isinstance(sources, (list, tuple)):

@@ -12,14 +12,14 @@ def git_version():
         return out
     try:
         out = _minimal_ext_cmd(['git', 'rev-parse', 'HEAD'])
-        GIT_REVISION = out.strip().decode('utf-8')
-    except Exception:
+        GIT_REVISION = out.strip().decode('ascii')
+    except OSError:
         GIT_REVISION = 'Unknown'
     return GIT_REVISION
 
-def write_version_py(VERSION, ISRELEASED, filename='thermopyl/version.py'):
+def write_version_py(VERSION, ISRELEASED, filename='MDTraj/version.py'):
     cnt = """
-# THIS FILE IS GENERATED FROM THERMOPYL SETUP.PY
+# THIS FILE IS GENERATED FROM MDTRAJ SETUP.PY
 short_version = '%(version)s'
 version = '%(version)s'
 full_version = '%(full_version)s'
@@ -36,7 +36,7 @@ if not release:
         GIT_REVISION = 'Unknown'
     if not ISRELEASED:
         FULLVERSION += '.dev-' + GIT_REVISION[:7]
-    with open(filename, 'w', encoding='utf-8') as a:
+    with open(filename, 'w') as a:
         a.write(cnt % {'version': VERSION,
                        'full_version': FULLVERSION,
                        'git_revision': GIT_REVISION,
