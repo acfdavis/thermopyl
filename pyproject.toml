@@ -4,3 +4,33 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "thermopyl"
+version = "1.0.1"
+description = "Python tools for ThermoML"
+readme = "README.md"
+authors = [
+    { name = "Kyle Beauchamp", email = "kyle.beauchamp@choderalab.org" }
+]
+license = { file = "LICENSE" }
+requires-python = ">=3.7"
+dependencies = [
+    "six",
+    "pandas",
+    "pyxb==1.2.4",
+    "feedparser",
+    "tables"
+]
+
+[project.urls]
+Homepage = "https://github.com/choderalab/thermopyl"
+Repository = "https://github.com/choderalab/thermopyl"
+
+[project.scripts]
+thermoml-update-mirror = "thermopyl.scripts.update_archive:main"
+thermoml-build-pandas = "thermopyl.scripts.parse_xml:main"
+
+[tool.setuptools]
+packages = ["thermopyl"]
+include-package-data = true

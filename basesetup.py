@@ -1,3 +1,6 @@
+# NOTE: This file is legacy and not required for modern setuptools-based builds.
+# For modern Python packaging, use pyproject.toml and setup.py only.
+
 import os
 import sys
 import json

@@ -1,15 +1,12 @@
-import tempfile
-import os
-import shutil
-
 from thermopyl.core.chemistry_utils import (
     count_atoms,
     count_atoms_in_set,
     formula_to_element_counts
 )
-
-
 from thermopyl.utils import get_fn, build_pandas_dataframe, pandas_dataframe
+import tempfile
+import os
+import shutil
 
 formula = "C3H5N2OClBr"
 reference_atom_count = 13
@@ -29,6 +26,16 @@ def test_build_pandas_dataframe():
     try:
         filenames = [get_fn("je8006138.xml")]
         data, compounds = build_pandas_dataframe(filenames)
+
+        # Debugging output to understand what was parsed
+        print("\n=== DEBUG OUTPUT ===")
+        print(f"Parsed {len(data)} records")
+        print(f"DataFrame columns: {list(data.columns)}")
+        print(f"Compound entries: {len(compounds)}")
+        print(f"First few entries:\n{data.head()}")
+        print("=== END DEBUG OUTPUT ===\n")
+
+        # Write and read data to confirm persistence and structure
         data.to_hdf(os.path.join(tmpdir, 'data.h5'), key='data')
         compounds.to_hdf(os.path.join(tmpdir, 'compound_name_to_formula.h5'), key='data')
         df = pandas_dataframe(thermoml_path=tmpdir)

@@ -32,8 +32,11 @@ setup(
     name="thermopyl",
     author="Kyle Beauchamp",
     author_email="kyle.beauchamp@choderalab.org",
-    description=__doc__.split("\n")[0],
-    long_description="\n".join(__doc__.split("\n")[2:]),
+    description="Python tools for ThermoML",
+    long_description=(
+        open("README.md").read() if os.path.exists("README.md")
+        else "Python tools for ThermoML"
+    ),
     long_description_content_type="text/markdown",
     version=__version__,
     url="https://github.com/choderalab/thermopyl",
@@ -55,4 +58,12 @@ setup(
             "thermoml-build-pandas = thermopyl.scripts.parse_xml:main",
         ]
     },
+    license="GPL-2.0-or-later",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+        "Operating System :: OS Independent",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering :: Chemistry",
+    ],
 )
