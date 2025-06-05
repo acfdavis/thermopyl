@@ -18,8 +18,8 @@ def formula_to_element_counts(formula_string: str) -> Dict[str, int]:
     dict
         Dictionary of element -> count (e.g., {'Fe': 2, 'S': 3, 'O': 12})
     """
-    def multiply_counts(base: Dict[str, int], multiplier: int) -> Dict[str, int]:
-        return {element: count * multiplier for element, count in base.items()}
+    
+    def multiply_counts(base: Dict[str, int], multiplier: int) -> Dict[str, int]:return {element: count * multiplier for element, count in base.items()}
 
     def parse(tokens: str) -> Counter:
         stack = []

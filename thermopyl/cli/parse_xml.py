@@ -7,7 +7,7 @@ import glob
 import os
 import argparse
 from thermopyl import Parser
-from thermopyl.utils import build_pandas_dataframe
+from thermopyl.core.utils import build_pandas_dataframe
 
 def main():
     # Parse command-line arguments.
