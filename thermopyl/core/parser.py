@@ -5,7 +5,7 @@ import xmlschema
 from collections import Counter
 
 
-from thermopyl.core.schema import ThermoMLRecord, VariableValue, PropertyValue
+from thermopyl.core.schema import NumValuesRecord, VariableValue, PropertyValue
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -13,9 +13,9 @@ logger.setLevel(logging.DEBUG)
 def get_tag(d: dict, key: str, ns: str) -> Any:
     return d.get(key) or d.get(f"{ns}{key}") or d.get(key.replace(f"{ns}", ""))
 
-def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.xsd") -> List[ThermoMLRecord]:
+def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.xsd") -> List[NumValuesRecord]:
     """
-    Parse a ThermoML XML file into a list of ThermoMLRecord instances.
+    Parse a ThermoML XML file into a list of NumValuesRecord instances.
 
     Parameters
     ----------
@@ -26,7 +26,7 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
 
     Returns
     -------
-    List[ThermoMLRecord]
+    List[NumValuesRecord]
         List of parsed records with compounds, variables, and properties.
     """
 
@@ -61,9 +61,6 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
         except Exception as e:
             logger.warning(f"Skipping invalid compound: {e}")
     
-    for k, v in compound_map.items():
-        logger.debug(f"Compound {k}: name={v.get('name')}, formula={v.get('formula')}")    
-
     results = []
     for entry in pure_data_section:
         try:
@@ -71,9 +68,11 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
                 str(get_tag(get_tag(c, "RegNum", ns), "nOrgNum", ns))
                 for c in get_tag(entry, "Component", ns) or []
             ]
-            material_id = "__".join(component_ids) if component_ids else "unknown"         
+            material_id = "__".join(sorted(component_ids)) if component_ids else "unknown"
+         
             components = []
             compound_formulas = {}
+            component_id_map = {} 
 
             for comp in get_tag(entry, "Component", ns) or []:
                 regnum = get_tag(comp, "RegNum", ns)
@@ -82,6 +81,7 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
                 name = info.get("name", f"Unknown-{org_num}")
                 components.append(name)
                 compound_formulas[name] = info.get("formula", "")
+                component_id_map[org_num] = formula if formula else name  # Track # Track for matching with var_number
 
             prop_name_map = {}
             prop_phase_map = {}
@@ -110,11 +110,14 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
             for var in get_tag(entry, "Variable", ns) or []:
                 try:
                     num = int(get_tag(var, "nVarNumber", ns))
-                    vtype_entry = get_tag(get_tag(var, "VariableID", ns), "VariableType", ns)                  
+                    vtype_entry = get_tag(get_tag(var, "VariableID", ns), "VariableType", ns)
                     if isinstance(vtype_entry, dict):
-                        vtype = next((v for k, v in vtype_entry.items() if k.endswith("e")), "UnknownType")
+                        vtype = vtype_entry.get("eVarType") or vtype_entry.get("e") or list(vtype_entry.values())[0]
+                    elif isinstance(vtype_entry, str):
+                        vtype = vtype_entry
                     else:
-                        vtype = "UnknownType"                   
+                        vtype = "UnknownType"
+                   
                     var_type_map[num] = vtype
                 except Exception as e:
                     logger.debug(f"Skipping property due to: {e}")
@@ -166,12 +169,13 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
                         logger.debug(f"Skipping property due to: {e}")
                         continue
 
-            record = ThermoMLRecord(
+            record = NumValuesRecord(
                 material_id=str(material_id),
                 components=components,
                 compound_formulas=compound_formulas,
                 variable_values=variable_values,
                 property_values=property_values,
+                component_id_map=component_id_map
             )
             results.append(record)
 

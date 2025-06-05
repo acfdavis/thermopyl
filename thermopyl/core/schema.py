@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Dict, Optional
 
+
 @dataclass
 class VariableValue:
     var_type: str
@@ -11,14 +12,17 @@ class VariableValue:
 @dataclass
 class PropertyValue:
     prop_name: str
-    values: List[str]
+    values: List[float]
     uncertainties: List[Optional[str]]
 
 @dataclass
-class ThermoMLRecord:
+class NumValuesRecord:
     material_id: str
     components: List[str]
     compound_formulas: Dict[str, str]
     variable_values: List[VariableValue]
     property_values: List[PropertyValue]
+    component_id_map: Dict[int, str]  # in NumValuesRecord class
+
+
 
