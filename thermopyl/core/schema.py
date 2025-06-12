@@ -6,7 +6,8 @@ from typing import List, Dict, Optional
 class VariableValue:
     var_type: str
     values: List[float]
-    var_number: Optional[int] = None  # New field
+    var_number: Optional[int] = None  # Existing field, ensure it's kept
+    linked_component_org_num: Optional[int] = None # New field
 
 
 @dataclass

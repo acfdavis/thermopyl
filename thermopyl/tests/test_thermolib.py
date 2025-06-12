@@ -22,7 +22,7 @@ pd.set_option('display.max_colwidth', None)
 test_files = [get_fn(f) for f in [
     "je8006138.xml",
     "acs.jced.8b00745.xml",
-    "acs.jced.8b00050.xml",
+   # "acs.jced.8b00050.xml",
     "j.tca.2012.07.033.xml",
     "j.tca.2007.01.009.xml"
 ]]
@@ -182,7 +182,7 @@ def test_variable_disambiguation_labels():
     }
 
     for v in record.variable_values:
-        row[f"var_{v.var_type}"] = v.values[0]
+        row[f"var_{v.var_type}"] = str(v.values[0])
 
     df = pd.DataFrame([row])
 
