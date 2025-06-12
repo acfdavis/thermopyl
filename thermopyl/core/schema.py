@@ -24,6 +24,5 @@ class NumValuesRecord:
     variable_values: List[VariableValue]
     property_values: List[PropertyValue]
     component_id_map: Dict[int, str]  # in NumValuesRecord class
-
-
-
+    source_file: str
+    citation: Optional[Dict[str, str]] = None

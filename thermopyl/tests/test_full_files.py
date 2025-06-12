@@ -38,11 +38,15 @@ def test_single_file_no_normalize():
     if not os.path.exists(single_test_file):
         pytest.skip(f"Test file {single_test_file} not found.")
     
-    data, compounds = build_pandas_dataframe([single_test_file], normalize_alloys=False)
-    print("\\n=== Single File (No Normalize) Data ===")
+    result = build_pandas_dataframe([single_test_file], normalize_alloys=False)
+    data = result["data"]
+    compounds = result["compounds"]
+    repository_metadata = result["repository_metadata"]
+    print("\n=== Single File (No Normalize) Data ===")
     print(data.head())
     print("=== Compound Data ===")
     print(compounds.head())
+    print(f"Repository metadata: {repository_metadata}")
     assert not data.empty
     assert "normalized_formula" not in data.columns # Should not be present if normalize_alloys=False
     assert "active_components" not in data.columns # Should not be present
@@ -52,11 +56,15 @@ def test_real_file_no_normalize():
     if not test_files:
         pytest.skip("No XML test files found in the data directory.")
         
-    data, compounds = build_pandas_dataframe(test_files, normalize_alloys=False)
-    print("\\n=== All Files (No Normalize) Data ===")
+    result = build_pandas_dataframe(test_files, normalize_alloys=False)
+    data = result["data"]
+    compounds = result["compounds"]
+    repository_metadata = result["repository_metadata"]
+    print("\n=== All Files (No Normalize) Data ===")
     print(data.head())
     print("=== Compound Data ===")
     print(compounds.head())
+    print(f"Repository metadata: {repository_metadata}")
     assert not data.empty
     assert "normalized_formula" not in data.columns
     assert "active_components" not in data.columns
@@ -68,13 +76,17 @@ def test_real_file_alloy_output():
     if not os.path.exists(alloy_test_file):
         pytest.skip(f"Test file {alloy_test_file} not found.")
         
-    data, compounds = build_pandas_dataframe([alloy_test_file], normalize_alloys=True)
+    result = build_pandas_dataframe([alloy_test_file], normalize_alloys=True)
+    data = result["data"]
+    compounds = result["compounds"]
+    repository_metadata = result["repository_metadata"]
 
-    print("\\n\\n=== Full Alloy Data (Focused Test) ===")
+    print("\n\n=== Full Alloy Data (Focused Test) ===")
     print(data.to_string()) # Print entire dataframe for this focused test
     print("=== Compound Data (Focused Test) ===")
     print(compounds.head())
-    print(f"Total records parsed: {len(data)}\\n")
+    print(f"Repository metadata: {repository_metadata}")
+    print(f"Total records parsed: {len(data)}\n")
 
     assert not data.empty, "Parsed DataFrame is empty — check parser or input file."
     assert "normalized_formula" in data.columns, "Missing normalized_formula column"

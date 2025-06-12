@@ -70,6 +70,14 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
         except Exception as e:
             logger.warning(f"Skipping invalid compound: {e}")
     
+    citation = {}
+    citation_section = get_tag(data_dict, "Citation", ns)
+    if citation_section:
+        for tag in ["sDOI", "sTitle", "sPubName", "yrPubYr", "sAuthor"]:
+            value = get_tag(citation_section, tag, ns)
+            if value is not None:
+                citation[tag] = value.strip() if isinstance(value, str) else value
+        
     results = []
     for entry in pure_data_section:
         try:
@@ -241,7 +249,9 @@ def parse_thermoml_xml(file_path: str, xsd_path: str = "thermopyl/data/ThermoML.
                         compound_formulas=compound_formulas, # Dict: name -> formula (symbol)
                         variable_values=current_variable_values,
                         property_values=current_property_values,
-                        component_id_map=component_id_map # Dict: nOrgNum -> formula (symbol)
+                        component_id_map=component_id_map, # Dict: nOrgNum -> formula (symbol)
+                        source_file=file_path,
+                        citation=citation
                     )
                     results.append(record)
 

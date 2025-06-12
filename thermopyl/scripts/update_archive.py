@@ -2,11 +2,11 @@
 """
 Update local mirror of the ThermoML Archive.
 """
-import thermopyl
+from thermopyl.core.update_archive import update_archive
 
 def main():
-    thermopyl.update_archive()
+    
+    update_archive()
 
 if __name__ == '__main__':
     raise SystemExit(main())
-
